@@ -159,12 +159,14 @@ Mike,9876543212,Interested in product
             <div className="distribution-info">
               <h4>Distribution Summary:</h4>
               <ul>
-                {Object.entries(uploadResult.distributionSummary || {}).map(([agentId, count]) => (
-                  <li key={agentId}>
-                    Agent ID: {agentId} - <strong>{count} leads</strong>
-                  </li>
-                ))}
-              </ul>
+  {uploadResult.distributionSummary?.map((item) => (
+    <li key={item.agentId}>
+      <strong>{item.agentName}</strong> ({item.agentEmail}) —{' '}
+      <strong>{item.count} leads</strong>
+    </li>
+  ))}
+</ul>
+
             </div>
           </div>
         </div>
