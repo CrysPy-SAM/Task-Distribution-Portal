@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FiHome, FiUsers, FiUpload, FiList } from 'react-icons/fi';
-import './Sidebar.css';
+// import './Sidebar.css';
 
 const Sidebar = () => {
   const menuItems = [

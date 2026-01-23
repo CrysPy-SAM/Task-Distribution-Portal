@@ -1,4 +1,4 @@
-// const Lead = require('../models/Lead');
+const Lead = require('../models/Lead');
 const Agent = require('../models/Agent');
 const fs = require('fs');
 const path = require('path');
@@ -64,7 +64,7 @@ exports.uploadLeads = async (req, res) => {
     const normalizedData = normalizeLeadData(parsedData);
 
     // Get all active agents
-    const agents = await Agent.find({ isActive: true }).select('_id');
+    const agents = await Agent.find({ isActive: true }).select('_id name email');
 
     if (agents.length === 0) {
       // Delete uploaded file
@@ -75,10 +75,22 @@ exports.uploadLeads = async (req, res) => {
       });
     }
 
-    // Get agent IDs
-    const agentIds = agents.map(agent => agent._id);
+    // ⚠️ FIX: Check if exactly 5 agents exist
+    if (agents.length < 5) {
+      fs.unlinkSync(filePath);
+      return res.status(400).json({
+        success: false,
+        message: `Only ${agents.length} active agent(s) found. Please create at least 5 agents before uploading leads.`,
+        currentAgents: agents.length,
+        required: 5
+      });
+    }
 
-    // Distribute leads among agents
+    // ⚠️ FIX: Use only first 5 agents for distribution
+    const selectedAgents = agents.slice(0, 5);
+    const agentIds = selectedAgents.map(agent => agent._id);
+
+    // Distribute leads among 5 agents
     const distributedLeads = distributeLeads(normalizedData, agentIds);
 
     // Add uploadedBy field to each lead
@@ -93,23 +105,39 @@ exports.uploadLeads = async (req, res) => {
     // Delete uploaded file after processing
     fs.unlinkSync(filePath);
 
-    // Get distribution summary
+    // Get distribution summary with agent names
     const distributionSummary = {};
+    const agentMap = {};
+    
+    // Create agent map for names
+    selectedAgents.forEach(agent => {
+      agentMap[agent._id.toString()] = {
+        name: agent.name,
+        email: agent.email
+      };
+    });
+
+    // Calculate distribution
     insertedLeads.forEach(lead => {
       const agentId = lead.assignedTo.toString();
       if (!distributionSummary[agentId]) {
-        distributionSummary[agentId] = 0;
+        distributionSummary[agentId] = {
+          agentId: agentId,
+          agentName: agentMap[agentId]?.name || 'Unknown',
+          agentEmail: agentMap[agentId]?.email || 'Unknown',
+          count: 0
+        };
       }
-      distributionSummary[agentId]++;
+      distributionSummary[agentId].count++;
     });
 
     res.status(201).json({
       success: true,
-      message: 'Leads uploaded and distributed successfully',
+      message: 'Leads uploaded and distributed successfully among 5 agents',
       data: {
         totalLeads: insertedLeads.length,
-        totalAgents: agentIds.length,
-        distributionSummary
+        totalAgents: 5,
+        distributionSummary: Object.values(distributionSummary)
       }
     });
   } catch (error) {

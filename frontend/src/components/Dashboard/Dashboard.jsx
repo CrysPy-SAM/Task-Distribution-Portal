@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { agentAPI, leadAPI } from '../../services/api';
 import { FiUsers, FiFileText, FiTrendingUp } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import './Dashboard.css';
+// import './Dashboard.css';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({

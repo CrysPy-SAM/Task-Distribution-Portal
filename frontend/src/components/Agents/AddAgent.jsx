@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { agentAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import { FiX } from 'react-icons/fi';
-import './AddAgent.css';
+// import './AddAgent.css';
 
 const AddAgent = ({ onClose, onAgentAdded }) => {
   const [formData, setFormData] = useState({

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { leadAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import { FiUpload, FiFile, FiCheckCircle } from 'react-icons/fi';
-import './UploadLeads.css';
+// import './UploadLeads.css';
 
 const UploadLeads = () => {
   const [file, setFile] = useState(null);

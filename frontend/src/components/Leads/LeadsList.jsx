@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { leadAPI, agentAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import { FiUser, FiPhone } from 'react-icons/fi';
-import './LeadsList.css';
+// import './LeadsList.css';
 
 const LeadsList = () => {
   const [leads, setLeads] = useState([]);

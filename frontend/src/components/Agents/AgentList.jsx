@@ -3,7 +3,7 @@ import { agentAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import { FiPlus, FiMail, FiPhone, FiTrash2 } from 'react-icons/fi';
 import AddAgent from './AddAgent';
-import './AgentList.css';
+// import './AgentList.css';
 
 const AgentList = () => {
   const [agents, setAgents] = useState([]);

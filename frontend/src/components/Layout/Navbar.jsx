@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FiLogOut, FiUser } from 'react-icons/fi';
 import { toast } from 'react-toastify';
-import './Navbar.css';
+// import './Navbar.css';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
